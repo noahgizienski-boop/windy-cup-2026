@@ -1,0 +1,145 @@
+╔══════════════════════════════════════════════════════════════╗
+║         WINDY CUP 2026 — DEPLOYMENT GUIDE                    ║
+║         Get live at windycup2026.vercel.app in ~20 min       ║
+╚══════════════════════════════════════════════════════════════╝
+
+WHAT YOU'LL SET UP (all free):
+  • Supabase  — your live database (stores all scores)
+  • GitHub    — holds your code (one-time upload)
+  • Vercel    — hosts the app at a real URL
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 1 — SUPABASE DATABASE  (~5 min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Go to https://supabase.com → click "Start your project"
+2. Sign up (GitHub login is easiest)
+3. Click "New project"
+     Name:     windy-cup-2026
+     Password: make something up, save it
+     Region:   US East (closest to you)
+4. Click "Create new project" — wait ~2 minutes to spin up
+
+5. Go to SQL Editor (left sidebar, the <> icon)
+6. Click "New query"
+7. Open the file "supabase_setup.sql" from this folder
+8. Copy everything → paste into the query box → click RUN
+9. You should see "Success. No rows returned"
+
+10. Get your API keys:
+    Left sidebar → Settings → API
+    Copy "Project URL"     → looks like https://xxxxx.supabase.co
+    Copy "anon public" key → long string starting with eyJ...
+    ⚠️  SAVE BOTH — you need them in Step 3
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 2 — GITHUB  (~5 min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Install Node.js if you don't have it: https://nodejs.org
+   (download the LTS version)
+
+2. Go to https://github.com → sign up / log in
+
+3. Click "+" (top right) → "New repository"
+     Name:     windy-cup-2026
+     Visibility: Public or Private (both work)
+   Click "Create repository"
+
+4. Open Terminal (Mac) or Command Prompt (Windows)
+   Navigate to the windycup folder, then run:
+
+   git init
+   git add .
+   git commit -m "Windy Cup 2026"
+   git branch -M main
+   git remote add origin https://github.com/YOUR_USERNAME/windy-cup-2026.git
+   git push -u origin main
+
+   (replace YOUR_USERNAME with your actual GitHub username)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 3 — VERCEL DEPLOY  (~5 min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Go to https://vercel.com → Sign up with GitHub
+
+2. Click "Add New Project"
+3. Find "windy-cup-2026" in your repos → click "Import"
+
+4. ⚠️ BEFORE clicking Deploy — expand "Environment Variables":
+   Add variable 1:
+     Name:  REACT_APP_SUPABASE_URL
+     Value: (paste your Supabase Project URL from Step 1)
+   Add variable 2:
+     Name:  REACT_APP_SUPABASE_ANON_KEY
+     Value: (paste your Supabase anon key from Step 1)
+
+5. Click "Deploy" — takes about 2 minutes
+
+6. 🎉 You'll get a URL like:
+      https://windy-cup-2026.vercel.app
+   
+   That's your app! Share it with everyone.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 4 — INSTALL AS AN APP ON PHONES  (~30 sec per person)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+iPhone (Safari):
+  1. Open the link in Safari
+  2. Tap the Share button (box with arrow pointing up)
+  3. Scroll down → tap "Add to Home Screen"
+  4. Tap "Add" — done ✅
+
+Android (Chrome):
+  1. Open the link in Chrome
+  2. Tap the 3-dot menu (top right)
+  3. Tap "Add to Home Screen"
+  4. Tap "Add" — done ✅
+
+The app will appear on their home screen with a golf icon.
+It opens full-screen, no browser bar — looks like a real app.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ON THE DAY — HOW IT WORKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Text the link the night before so everyone installs it
+• Each group has one designated scorer for their match
+• After each hole: open the match → tap in scores → close
+• Everyone else sees scores update in under 1 second
+• The green pulsing dot = live and connected
+• Works on spotty golf course cell signal (scores queue and
+  save when connection returns)
+
+BEST PRACTICE: Designate one person per match as the scorer.
+Enter scores while walking to the next tee. Takes 10 seconds.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+App shows blank / won't load:
+  → Check both env variables are set correctly in Vercel
+  → Vercel dashboard → your project → Settings → Environment Variables
+  → After editing, go to Deployments → click "Redeploy"
+
+Scores not saving (shows "Offline"):
+  → Supabase → Table Editor → confirm "scores" table exists
+  → Re-run the SQL from supabase_setup.sql if needed
+
+Scores saving but not updating live:
+  → Supabase → Database → Replication → confirm "scores" is listed
+  → If not: run ALTER PUBLICATION supabase_realtime ADD TABLE scores;
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEXT YEAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To reset scores:  Supabase → SQL Editor → run: DELETE FROM scores;
+To update matchups: edit src/data.js and push to GitHub —
+                    Vercel redeploys automatically in 2 minutes.
+
+The URL stays the same every year. Just clear scores and update
+the matchup data — everyone already has the app installed.
