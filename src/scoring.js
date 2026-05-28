@@ -22,14 +22,14 @@ export function computeMatch(scores, match) {
 
   if (standing > 0) {
     leader = 'j'; const u = standing;
-    if (u > rem)       { status = 'done'; txt = `${u}&${rem}`; }
-    else if (rem === 0){ status = 'done'; txt = `${u} UP`; }
-    else                 txt = `${u} UP`;
+    if (u > rem)        { status = 'done'; txt = `${u}&${rem}`; }
+    else if (rem === 0) { status = 'done'; txt = `${u} UP`; }
+    else                  txt = `${u} UP`;
   } else if (standing < 0) {
     leader = 'o'; const u = -standing;
-    if (u > rem)       { status = 'done'; txt = `${u}&${rem}`; }
-    else if (rem === 0){ status = 'done'; txt = `${u} UP`; }
-    else                 txt = `${u} UP`;
+    if (u > rem)        { status = 'done'; txt = `${u}&${rem}`; }
+    else if (rem === 0) { status = 'done'; txt = `${u} UP`; }
+    else                  txt = `${u} UP`;
   } else if (rem === 0) { status = 'done'; txt = 'HALVED'; }
 
   let pj = 0, po = 0;
@@ -51,25 +51,25 @@ export function computeMatch(scores, match) {
 
 export function fmtPts(n) { return n % 1 === 0 ? String(n) : n.toFixed(1); }
 export function fmtVP(v)  { return v === 0 ? 'E' : v > 0 ? `+${v}` : `${v}`; }
-export function vpColor(v){ return v < 0 ? '#4fc87a' : v > 0 ? '#e05c3a' : '#e8d5a3'; }
+export function vpColor(v){ return v < 0 ? '#2d7a3a' : v > 0 ? '#c0392b' : '#4a5568'; }
 
 export function scoreColor(s, p) {
-  if (s === '') return '#444';
+  if (s === '') return '#9ca3af';
   const d = Number(s) - p;
-  if (d <= -2) return '#f0c040';
-  if (d === -1) return '#4fc87a';
-  if (d === 0)  return '#e8d5a3';
-  if (d === 1)  return '#e05c3a';
-  return '#c0392b';
+  if (d <= -2) return '#b7791f';   // eagle - gold
+  if (d === -1) return '#2d7a3a';  // birdie - green
+  if (d === 0)  return '#2d3748';  // par - dark
+  if (d === 1)  return '#c0392b';  // bogey - red
+  return '#7b1d1d';                // double+ dark red
 }
 export function scoreBg(s, p) {
-  if (s === '') return '#111';
+  if (s === '') return '#f9fafb';
   const d = Number(s) - p;
-  if (d <= -2) return 'rgba(240,192,64,.22)';
-  if (d === -1) return 'rgba(79,200,122,.18)';
-  if (d === 0)  return 'rgba(232,213,163,.07)';
-  if (d === 1)  return 'rgba(224,92,58,.2)';
-  return 'rgba(192,57,43,.3)';
+  if (d <= -2) return 'rgba(183,121,31,.15)';
+  if (d === -1) return 'rgba(45,122,58,.12)';
+  if (d === 0)  return 'rgba(45,55,72,.06)';
+  if (d === 1)  return 'rgba(192,57,43,.1)';
+  return 'rgba(123,29,29,.15)';
 }
 export function scoreLabel(s, p) {
   if (s === '') return '';
@@ -77,9 +77,24 @@ export function scoreLabel(s, p) {
   return d === 0 ? 'E' : d > 0 ? `+${d}` : `${d}`;
 }
 
+// Odds: green = favorite (negative american odds), gold = underdog (positive), gray = even/NA
 export function oddsColor(odds) {
-  if (!odds || odds === 'N/A' || odds === 'EVEN') return '#888';
+  if (!odds || odds === 'N/A') return '#9ca3af';
+  if (odds === 'EVEN') return '#6b7280';
   const n = Number(odds);
-  if (n < 0) return '#4fc87a';  // favorite = green
-  return '#e05c3a';              // underdog = red
+  if (n < 0) return '#2d7a3a';   // favorite - green
+  return '#b7791f';               // underdog - gold/amber
+}
+export function oddsBg(odds) {
+  if (!odds || odds === 'N/A') return '#f3f4f6';
+  if (odds === 'EVEN') return '#f3f4f6';
+  const n = Number(odds);
+  if (n < 0) return 'rgba(45,122,58,.1)';
+  return 'rgba(183,121,31,.1)';
+}
+export function oddsLabel(odds) {
+  if (!odds || odds === 'N/A') return 'N/A';
+  if (odds === 'EVEN') return 'EVEN';
+  const n = Number(odds);
+  return n < 0 ? '⭐ FAV' : '🐶 DOG';
 }
