@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from './supabase';
 import { ALL, R1, R2, R3, getCourse, getFormat } from './data';
-import { computeMatch, fmtPts, fmtVP, vpColor, scoreColor, scoreBg, scoreLabel, oddsColor, oddsBg, oddsLabel } from './scoring';
+import { computeMatch, fmtPts, fmtVP, vpColor, scoreColor, scoreBg, scoreLabel } from './scoring';
 
 const JACK_COL = '#1a5c2e';
 const JACK_BG  = '#e8f5ec';
+const JACK_LIGHT = '#4a9e64';
 const JOE_COL  = '#8b1a1a';
 const JOE_BG   = '#fdf0f0';
+const JOE_LIGHT = '#c0392b';
 const GREEN    = '#1e6b35';
 const WHITE    = '#ffffff';
 const CREAM    = '#f5f7f4';
@@ -17,24 +19,17 @@ const TEXT_LITE= '#718096';
 function sortOdds(odds, jName, oName) {
   if (!odds || (odds[0] === 'N/A' && odds[1] === 'N/A')) return null;
   const j = odds[0], o = odds[1];
-  if (j === o) return [
-    {name:jName, odds:"Pick 'Em", label:"Pick 'Em", col:'#6b7280', bg:'#f3f4f6'},
-    {name:oName, odds:"Pick 'Em", label:"Pick 'Em", col:'#6b7280', bg:'#f3f4f6'},
-  ];
-  if (j === 'EVEN' && o === 'EVEN') return [
-    {name:jName, odds:"Pick 'Em", label:'', col:'#6b7280', bg:'#f3f4f6'},
-    {name:oName, odds:"Pick 'Em", label:'', col:'#6b7280', bg:'#f3f4f6'},
+  if (j === o || (j === 'EVEN' && o === 'EVEN')) return [
+    {name:jName, odds:"Pick 'Em", label:"PICK 'EM", jackSide:true},
+    {name:oName, odds:"Pick 'Em", label:"PICK 'EM", jackSide:false},
   ];
   const jNum = j === 'EVEN' ? 0 : Number(j);
   const oNum = o === 'EVEN' ? 0 : Number(o);
   const jIsFav = jNum < oNum;
-  const fav = jIsFav
-    ? {name:jName, odds:j, label:'FAV', col:'#2d7a3a', bg:'rgba(45,122,58,.1)'}
-    : {name:oName, odds:o, label:'FAV', col:'#2d7a3a', bg:'rgba(45,122,58,.1)'};
-  const dog = jIsFav
-    ? {name:oName, odds:o, label:'DOG', col:'#b7791f', bg:'rgba(183,121,31,.1)'}
-    : {name:jName, odds:j, label:'DOG', col:'#b7791f', bg:'rgba(183,121,31,.1)'};
-  return [fav, dog];
+  return [
+    {name: jIsFav ? jName : oName, odds: jIsFav ? j : o, label:'⭐ FAV', jackSide: jIsFav},
+    {name: jIsFav ? oName : jName, odds: jIsFav ? o : j, label:'🐶 DOG', jackSide: !jIsFav},
+  ];
 }
 
 function OddsRow({ match, size }) {
@@ -47,15 +42,19 @@ function OddsRow({ match, size }) {
   );
   return (
     <div style={{ display:'flex', gap:5, marginTop:sz==='sm'?6:10, alignItems:'stretch', flexWrap:'wrap' }}>
-      {sorted.map((p, i) => (
-        <div key={i} style={{ background:p.bg, border:'1px solid '+p.col+'33', borderRadius:6, padding:sz==='sm'?'4px 8px':'6px 12px', minWidth:sz==='sm'?60:80 }}>
-          <div style={{ color:TEXT_MID, fontSize:sz==='sm'?8:9, fontWeight:600, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:sz==='sm'?90:130, marginBottom:1 }}>
-            {p.name.split(' ')[0]}
+      {sorted.map((p, i) => {
+        const teamCol = p.jackSide ? JACK_COL : JOE_COL;
+        const teamBg  = p.jackSide ? JACK_BG  : JOE_BG;
+        return (
+          <div key={i} style={{ background:teamBg, border:'2px solid '+teamCol+'55', borderRadius:7, padding:sz==='sm'?'4px 9px':'7px 13px', minWidth:sz==='sm'?62:85 }}>
+            <div style={{ color:teamCol, fontSize:sz==='sm'?8:9, fontWeight:700, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:sz==='sm'?90:130, marginBottom:1 }}>
+              {p.name.split(' ')[0]}
+            </div>
+            <div style={{ color:teamCol, fontSize:sz==='sm'?13:17, fontWeight:900, lineHeight:1 }}>{p.odds}</div>
+            <div style={{ color:teamCol, fontSize:7, fontWeight:700, marginTop:1, opacity:0.8 }}>{p.label}</div>
           </div>
-          <div style={{ color:p.col, fontSize:sz==='sm'?12:15, fontWeight:800, lineHeight:1 }}>{p.odds}</div>
-          <div style={{ color:p.col, fontSize:7, fontWeight:600, marginTop:1 }}>{p.label}</div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -324,49 +323,54 @@ export default function App() {
   return(
     <div style={{ minHeight:'100vh', background:CREAM, color:'#1a2e1a', paddingBottom:100, fontFamily:'Georgia,serif' }}>
       <style>{`input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}*{-webkit-tap-highlight-color:transparent;box-sizing:border-box}`}</style>
+
       <div style={{ background:'linear-gradient(160deg,#1a5c2e 0%,'+GREEN+' 60%,#2d8a4a 100%)', boxShadow:'0 3px 16px rgba(0,0,0,0.2)', position:'sticky', top:0, zIndex:50 }}>
         <div style={{ position:'absolute', top:10, right:14, display:'flex', alignItems:'center', gap:4 }}>
           <div style={{ width:7, height:7, borderRadius:'50%', background:syncDot, boxShadow:syncStatus==='live'?'0 0 6px '+syncDot:'none', animation:syncStatus==='live'?'pulse 2s infinite':'none' }}/>
           <span style={{ color:'rgba(255,255,255,0.5)', fontSize:8 }}>{syncStatus==='live'?'Live':syncStatus==='connecting'?'…':'Offline'}</span>
         </div>
-        <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:160, height:'100%', opacity:0.07, backgroundImage:'url(/windy-logo.png)', backgroundSize:'contain', backgroundRepeat:'no-repeat', backgroundPosition:'center', pointerEvents:'none' }}/>
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:14, padding:'14px 0 10px' }}>
-          <img src="/windy-logo.png" alt="Windy Classic" style={{ height:72, width:'auto', objectFit:'contain', filter:'drop-shadow(0 2px 6px rgba(0,0,0,0.3))' }}/>
+
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:14, padding:'14px 16px 10px' }}>
+          <img src="/windy-logo.png" alt="Windy Classic"
+            style={{ height:90, width:'auto', objectFit:'contain', filter:'drop-shadow(0 2px 8px rgba(0,0,0,0.4)) brightness(1.1)' }}/>
           <div style={{ textAlign:'left' }}>
-            <div style={{ color:WHITE, fontSize:22, fontWeight:'bold', letterSpacing:0.5, lineHeight:1.1 }}>The Windy Classic</div>
-            <div style={{ color:'rgba(255,255,255,0.65)', fontSize:9, marginTop:3, letterSpacing:1.5 }}>HICKORY VALLEY GC · MAY 30, 2026</div>
-            <div style={{ color:'rgba(255,255,255,0.5)', fontSize:8, marginTop:1, letterSpacing:1 }}>DELCO, PA · EST. 2025</div>
+            <div style={{ color:WHITE, fontSize:22, fontWeight:'bold', letterSpacing:0.5, lineHeight:1.1, textShadow:'0 1px 4px rgba(0,0,0,0.3)' }}>The Windy Classic</div>
+            <div style={{ color:'rgba(255,255,255,0.8)', fontSize:9, marginTop:4, letterSpacing:1.5 }}>HICKORY VALLEY GC · MAY 30, 2026</div>
+            <div style={{ color:'rgba(255,255,255,0.6)', fontSize:8, marginTop:1, letterSpacing:1 }}>DELCO, PA · EST. 2025</div>
           </div>
         </div>
+
         <div style={{ display:'flex', justifyContent:'center', paddingBottom:14 }}>
-          <div style={{ display:'inline-flex', borderRadius:12, overflow:'hidden', border:'1.5px solid rgba(255,255,255,0.2)', boxShadow:'0 3px 12px rgba(0,0,0,0.25)' }}>
-            <div style={{ background:jackTotal>joeTotal?'rgba(255,255,255,0.18)':'rgba(0,0,0,0.18)', padding:'10px 22px', textAlign:'center', borderRight:'1px solid rgba(255,255,255,0.15)', transition:'background .4s' }}>
+          <div style={{ display:'inline-flex', borderRadius:12, overflow:'hidden', border:'1.5px solid rgba(255,255,255,0.25)', boxShadow:'0 3px 12px rgba(0,0,0,0.25)' }}>
+            <div style={{ background:jackTotal>joeTotal?'rgba(255,255,255,0.22)':'rgba(0,0,0,0.2)', padding:'10px 22px', textAlign:'center', borderRight:'1px solid rgba(255,255,255,0.15)', transition:'background .4s' }}>
               <div style={{ display:'flex', alignItems:'center', gap:5, justifyContent:'center', marginBottom:2 }}>
-                <div style={{ width:8, height:8, borderRadius:2, background:'#a8e6b8' }}/>
-                <span style={{ color:'rgba(255,255,255,0.8)', fontSize:9, fontWeight:700, letterSpacing:2 }}>TEAM JACK</span>
+                <div style={{ width:9, height:9, borderRadius:2, background:'#a8e6b8', boxShadow:'0 0 4px rgba(168,230,184,0.6)' }}/>
+                <span style={{ color:'rgba(255,255,255,0.9)', fontSize:9, fontWeight:700, letterSpacing:2 }}>TEAM JACK</span>
               </div>
-              <div style={{ color:WHITE, fontSize:36, fontWeight:'bold', lineHeight:1.1 }}>{fmtPts(jackTotal)}</div>
+              <div style={{ color:WHITE, fontSize:36, fontWeight:'bold', lineHeight:1.1, textShadow:'0 1px 4px rgba(0,0,0,0.2)' }}>{fmtPts(jackTotal)}</div>
             </div>
-            <div style={{ background:'rgba(0,0,0,0.12)', padding:'10px 12px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
-              <div style={{ color:'rgba(255,255,255,0.35)', fontSize:9 }}>PTS</div>
+            <div style={{ background:'rgba(0,0,0,0.15)', padding:'10px 12px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
+              <div style={{ color:'rgba(255,255,255,0.4)', fontSize:9 }}>PTS</div>
               <div style={{ color:'rgba(255,255,255,0.25)', fontSize:14 }}>–</div>
             </div>
-            <div style={{ background:joeTotal>jackTotal?'rgba(255,255,255,0.18)':'rgba(0,0,0,0.18)', padding:'10px 22px', textAlign:'center', borderLeft:'1px solid rgba(255,255,255,0.15)', transition:'background .4s' }}>
+            <div style={{ background:joeTotal>jackTotal?'rgba(255,255,255,0.22)':'rgba(0,0,0,0.2)', padding:'10px 22px', textAlign:'center', borderLeft:'1px solid rgba(255,255,255,0.15)', transition:'background .4s' }}>
               <div style={{ display:'flex', alignItems:'center', gap:5, justifyContent:'center', marginBottom:2 }}>
-                <div style={{ width:8, height:8, borderRadius:2, background:'#f5a9a9' }}/>
-                <span style={{ color:'rgba(255,255,255,0.8)', fontSize:9, fontWeight:700, letterSpacing:2 }}>TEAM JOE</span>
+                <div style={{ width:9, height:9, borderRadius:2, background:'#f5a9a9', boxShadow:'0 0 4px rgba(245,169,169,0.6)' }}/>
+                <span style={{ color:'rgba(255,255,255,0.9)', fontSize:9, fontWeight:700, letterSpacing:2 }}>TEAM JOE</span>
               </div>
-              <div style={{ color:WHITE, fontSize:36, fontWeight:'bold', lineHeight:1.1 }}>{fmtPts(joeTotal)}</div>
+              <div style={{ color:WHITE, fontSize:36, fontWeight:'bold', lineHeight:1.1, textShadow:'0 1px 4px rgba(0,0,0,0.2)' }}>{fmtPts(joeTotal)}</div>
             </div>
           </div>
         </div>
       </div>
+
       <div style={{ maxWidth:700, margin:'0 auto', padding:'20px 12px 0' }}>
         <Section title="Round 1 — 2-Man Scramble" subtitle="Ambassador Course · 18 holes · 7:30am Shotgun Start" matches={R1} allScores={allScores} onOpen={setOpenId} jackPts={r1.j} joePts={r1.o} expanded={expanded.r1} onToggle={()=>setExpanded(p=>({...p,r1:!p.r1}))}/>
         <Section title="Round 2 — 2-Man Best Ball" subtitle="Presidential Course · Front 9 · 1:00pm–3:30pm Tee Times" matches={R2} allScores={allScores} onOpen={setOpenId} jackPts={r2.j} joePts={r2.o} expanded={expanded.r2} onToggle={()=>setExpanded(p=>({...p,r2:!p.r2}))}/>
         <Section title="Round 3 — Singles" subtitle="Presidential Course · Back 9 · Flights A–D" matches={R3} allScores={allScores} onOpen={setOpenId} jackPts={r3.j} joePts={r3.o} expanded={expanded.r3} onToggle={()=>setExpanded(p=>({...p,r3:!p.r3}))}/>
         <div style={{ color:TEXT_LITE, fontSize:9, textAlign:'center', marginTop:8, marginBottom:80 }}>Win = 1 pt · Halved = half pt each · tap any match to score</div>
       </div>
+
       <MuniCornerAd/>
       {openMatch&&<MatchDetail match={openMatch} scores={allScores[openId]||[]} onChange={(hi,team,val)=>handleChange(openId,hi,team,val)} onClose={()=>setOpenId(null)}/>}
     </div>
