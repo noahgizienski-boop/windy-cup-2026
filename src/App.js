@@ -37,7 +37,7 @@ function OddsRow({ match, size }) {
   const sorted = sortOdds(match.odds, match.j[0], match.o[0]);
   if (!sorted) return (
     <div style={{ display:'flex', gap:5, marginTop:6 }}>
-      <span style={{ background:'#f3f4f6', borderRadius:5, padding:'2px 8px', color:TEXT_LITE, fontSize:9, fontWeight:600 }}>Odds TBD</span>
+      <span style={{ background:'#f3f4f6', borderRadius:5, padding:'2px 8px', color:TEXT_LITE, fontSize:9, fontWeight:600 }}>Pick 'Em</span>
     </div>
   );
   return (
@@ -332,7 +332,7 @@ export default function App() {
 
         <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:14, padding:'14px 16px 10px' }}>
           <img src="/windy-logo.png" alt="Windy Classic"
-            style={{ height:90, width:'auto', objectFit:'contain', background:'white', borderRadius:'50%', padding:4, boxShadow:'0 2px 10px rgba(0,0,0,0.3)' }}/>
+            style={{ height:90, width:'auto', objectFit:'contain', filter:'drop-shadow(0 2px 8px rgba(0,0,0,0.4)) brightness(1.1)' }}/>
           <div style={{ textAlign:'left' }}>
             <div style={{ color:WHITE, fontSize:22, fontWeight:'bold', letterSpacing:0.5, lineHeight:1.1, textShadow:'0 1px 4px rgba(0,0,0,0.3)' }}>The Windy Classic</div>
             <div style={{ color:'rgba(255,255,255,0.8)', fontSize:9, marginTop:4, letterSpacing:1.5 }}>HICKORY VALLEY GC · MAY 30, 2026</div>
