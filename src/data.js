@@ -104,7 +104,7 @@ export const R3 = [
   {id:'r3_b4',lb:'Singles B4',c:'pb',j:['Ryan George'],     o:['Jason Kuzmick'],     odds:['-150','+135']},
   {id:'r3_b5',lb:'Singles B5',c:'pb',j:['Jerry Smyth'],     o:['Patrick Rymal'],     odds:['-500','+475']},
   {id:'r3_b6',lb:'Singles B6',c:'pb',j:['Shaun Jones'],     o:['Kevin Egan'],        odds:['-250','+225']},
-  {id:'r3_b7',lb:'Singles B7',c:'pb',j:['Mike Levy'],       o:['Bobby Castaldi'],    odds:['N/A','N/A']},
+  {id:'r3_b7',lb:'Singles B7',c:'pb',j:['Mike Levy'],       o:['Bobby Castaldi'],    odds:['EVEN','EVEN']},
   {id:'r3_b8',lb:'Singles B8',c:'pb',j:['Cillian Gilson'],  o:['Jack Davin'],        odds:['-110','-110']},
   {id:'r3_c1',lb:'Singles C1',c:'pb',j:['Casey Gilroy'],    o:['Brendan Ahearn'],    odds:['+110','-130']},
   {id:'r3_c2',lb:'Singles C2',c:'pb',j:['Jack Carpenter'],  o:['Joe Carpenter'],     odds:['+405','-420']},
