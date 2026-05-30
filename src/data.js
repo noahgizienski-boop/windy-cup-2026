@@ -1,32 +1,47 @@
+// ─── COURSE DATA — Hickory Valley GC, White Tees ─────────────────────────────
+
 export const AMBASSADOR = {
   name: 'Ambassador Course',
-  par:      [4,5,3,4,4,3,5,4,4, 4,3,5,4,4,3,4,5,4],
-  handicap: [7,1,17,11,5,15,3,13,9, 8,16,2,12,6,18,10,4,14],
-  yards:    [395,555,175,415,385,165,530,360,395, 390,155,545,375,405,135,385,520,385],
+  par:      [5,4,3,4,3,4,4,4,5, 5,4,3,4,4,4,3,4,4],
+  handicap: [7,5,13,15,17,11,3,9,1, 6,8,12,2,4,14,18,10,16],
+  yards:    [471,346,120,316,163,351,385,353,531, 440,330,153,413,365,258,164,384,367],
   holeNums: Array.from({length:18},(_,i)=>i+1),
   holes: 18,
 };
+
+export const PRESIDENTIAL = {
+  name: 'Presidential Course',
+  par:      [4,4,4,5,3,5,3,4,4, 4,3,4,4,5,3,4,5,4],
+  handicap: [9,5,11,7,17,13,15,1,3, 2,14,6,12,8,18,4,16,10],
+  yards:    [340,387,354,521,137,465,141,390,362, 428,188,362,369,528,112,420,451,335],
+  holeNums: Array.from({length:18},(_,i)=>i+1),
+  holes: 18,
+};
+
 export const PRES_FRONT = {
   name: 'Presidential Course',
-  par:      [4,4,3,5,4,3,4,4,5],
-  handicap: [5,9,17,1,13,15,7,11,3],
-  yards:    [410,380,160,540,395,145,420,370,510],
+  par:      [4,4,4,5,3,5,3,4,4],
+  handicap: [9,5,11,7,17,13,15,1,3],
+  yards:    [340,387,354,521,137,465,141,390,362],
   holeNums: [1,2,3,4,5,6,7,8,9],
   holes: 9,
 };
+
 export const PRES_BACK = {
   name: 'Presidential Course',
-  par:      [4,3,5,4,4,3,4,5,4],
-  handicap: [6,18,2,10,4,16,12,8,14],
-  yards:    [400,140,560,380,415,155,395,530,395],
+  par:      [4,3,4,4,5,3,4,5,4],
+  handicap: [2,14,6,12,8,18,4,16,10],
+  yards:    [428,188,362,369,528,112,420,451,335],
   holeNums: [10,11,12,13,14,15,16,17,18],
   holes: 9,
 };
+
 export function getCourse(key) {
   if (key === 'amb') return AMBASSADOR;
   if (key === 'pf')  return PRES_FRONT;
   return PRES_BACK;
 }
+
 export function getFormat(id) {
   if (id.startsWith('r1')) return 'scramble';
   if (id.startsWith('r2')) return 'bestball';
@@ -34,7 +49,6 @@ export function getFormat(id) {
 }
 
 // ── ROUND 1: 2-Man Scramble, Ambassador, 7:30am Shotgun ──────────────────────
-// Order from spreadsheet holes 1-16
 export const R1 = [
   {id:'r1_1', lb:'Scramble 1',  c:'amb', tee:'Hole 1',  j:['Timmy Gallagher','Aidan Reed'],       o:['Kevin Deprince','Ryan Buckton']},
   {id:'r1_2', lb:'Scramble 2',  c:'amb', tee:'Hole 2',  j:['Brendan George','Austin Serra'],      o:['Kane Gallagher','Drew Rhoton']},
@@ -48,17 +62,16 @@ export const R1 = [
   {id:'r1_10',lb:'Scramble 10', c:'amb', tee:'Hole 10', j:['Ryan George','Liam Sullivan'],        o:['PJ Tecco','Jack Wert']},
   {id:'r1_11',lb:'Scramble 11', c:'amb', tee:'Hole 11', j:['Shaun Jones','Jack Thornton'],        o:['Danny Roe','Noah Gizienski']},
   {id:'r1_12',lb:'Scramble 12', c:'amb', tee:'Hole 12', j:['Sean Donohue','Brian Stratton'],      o:['Bobby Castaldi','George Doemling']},
-  {id:'r1_13',lb:'Scramble 13', c:'amb', tee:'Hole 13', j:['Matt Young','Brian Young'],           o:['Pat Rymal','Rob Macoy']},
+  {id:'r1_13',lb:'Scramble 13', c:'amb', tee:'Hole 13', j:['Matt Young','Aidan McNulty'],         o:['Pat Rymal','Rob Macoy']},
   {id:'r1_14',lb:'Scramble 14', c:'amb', tee:'Hole 14', j:['Jerry Smyth','Jack Carpenter'],       o:['Jason Kuzmick','Danny Smyth']},
   {id:'r1_15',lb:'Scramble 15', c:'amb', tee:'Hole 15', j:['Mike Levy','Casey Gilroy'],           o:['Jack Armstrong','Fynn McNulty']},
   {id:'r1_16',lb:'Scramble 16', c:'amb', tee:'Hole 16', j:['Danny Sullivan','PJ Murphy'],         o:['Jack Davin','Joe Carpenter']},
 ];
 
-// ── ROUND 2: 2-Man Best Ball, Presidential Front 9, 1:00pm-3:30pm ────────────
-// Ordered by tee time from spreadsheet
+// ── ROUND 2: 2-Man Best Ball, Presidential Front 9, 1:00pm–3:30pm ────────────
 export const R2 = [
   {id:'r2_1', lb:'Best Ball 1',  c:'pf', tee:'1:00 PM', j:['Cillian Gilson','Nick Donegan'],     o:['Jack Davin','Jake Ruane']},
-  {id:'r2_2', lb:'Best Ball 2',  c:'pf', tee:'1:10 PM', j:['Greg Damico','Brian Young'],          o:['Ryan Odgers','Fynn McNulty']},
+  {id:'r2_2', lb:'Best Ball 2',  c:'pf', tee:'1:10 PM', j:['Greg Damico','Aidan McNulty'],        o:['Ryan Odgers','Fynn McNulty']},
   {id:'r2_3', lb:'Best Ball 3',  c:'pf', tee:'1:20 PM', j:['Colin McCormick','Chris Anderson'],   o:['Gerard Sweeney','Rob Macoy']},
   {id:'r2_4', lb:'Best Ball 4',  c:'pf', tee:'1:30 PM', j:['Shaun Jones','Declan Donaher'],       o:['Kevin Egan','Will Higson']},
   {id:'r2_5', lb:'Best Ball 5',  c:'pf', tee:'1:40 PM', j:['Matt Young','John Seidman'],          o:['PJ Tecco','Matt Gillen']},
@@ -75,8 +88,7 @@ export const R2 = [
   {id:'r2_16',lb:'Best Ball 16', c:'pf', tee:'3:30 PM', j:['Andrew Damico','Casey Gilroy'],       o:['Kane Gallagher','Brendan Ahearn']},
 ];
 
-// ── ROUND 3: Singles, Presidential Back 9 ─────────────────────────────────────
-// Same order as singles sheet - no tee times needed (back 9 of afternoon round)
+// ── ROUND 3: Singles, Presidential Back 9 ────────────────────────────────────
 export const R3 = [
   {id:'r3_a1',lb:'Singles A1',c:'pb',j:['Andrew Damico'],   o:['Kane Gallagher'],    odds:['-110','-110']},
   {id:'r3_a2',lb:'Singles A2',c:'pb',j:['Timmy Gallagher'], o:['Brendan McGroary'],  odds:['-155','+135']},
@@ -97,7 +109,7 @@ export const R3 = [
   {id:'r3_c1',lb:'Singles C1',c:'pb',j:['Casey Gilroy'],    o:['Brendan Ahearn'],    odds:['+110','-130']},
   {id:'r3_c2',lb:'Singles C2',c:'pb',j:['Jack Carpenter'],  o:['Joe Carpenter'],     odds:['+405','-420']},
   {id:'r3_c3',lb:'Singles C3',c:'pb',j:['Brian Stratton'],  o:['Danny Smyth'],       odds:['-500','+485']},
-  {id:'r3_c4',lb:'Singles C4',c:'pb',j:['Brian Young'],     o:['George Doemling'],   odds:['+145','-160']},
+  {id:'r3_c4',lb:'Singles C4',c:'pb',j:['Aidan McNulty'],   o:['George Doemling'],   odds:['+145','-160']},
   {id:'r3_c5',lb:'Singles C5',c:'pb',j:['PJ Murphy'],       o:['Fynn McNulty'],      odds:['-110','-110']},
   {id:'r3_c6',lb:'Singles C6',c:'pb',j:['Chris Anderson'],  o:['Rob Macoy'],         odds:['-400','+385']},
   {id:'r3_c7',lb:'Singles C7',c:'pb',j:['Jack Thornton'],   o:['Jack Wert'],         odds:['+225','-235']},
